@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const Item = new Schema({
+const ItemSchema = new Schema({
   name: { type: String, required: true, maxLength: 100 },
   description: { type: String, required: false, maxLength: 300 },
   format: { type: String, required: true, maxLength: 30 },
@@ -14,4 +14,4 @@ ItemSchema.virtual("url").get(function () {
   return `/item/${this._id}`;
 });
 
-module.exports = mongoose.model("Item", Item);
+module.exports = mongoose.model("Item", ItemSchema);

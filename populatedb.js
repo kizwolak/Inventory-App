@@ -1,10 +1,10 @@
 #! /usr/bin/env node
 
 // Get arguments passed on command line
-const userArgs = process.argv.slice(2);
 
 const Category = require("./models/category");
 const Item = require("./models/item");
+require("dotenv").config();
 
 const categories = [];
 const items = [];
@@ -20,10 +20,8 @@ async function main() {
   console.log("Debug: About to connect");
   await mongoose.connect(mongoDB);
   console.log("Debug: Should be connected?");
-  await createGenres();
-  await createAuthors();
-  await createBooks();
-  await createBookInstances();
+  await createCategories();
+  await createItems();
   console.log("Debug: Closing mongoose");
   mongoose.connection.close();
 }
@@ -35,10 +33,18 @@ async function categoryCreate(name) {
   console.log(`Added category: ${name}`);
 }
 
-async function itemCreate(name, description, category, price, in_stock) {
+async function itemCreate(
+  name,
+  description,
+  format,
+  category,
+  price,
+  in_stock
+) {
   itemdetail = {
     name: name,
     description: description,
+    format: format,
     category: category,
     price: price,
     in_stock: in_stock,
@@ -74,8 +80,8 @@ async function createItems() {
     ),
     itemCreate(
       "Untrue",
-      "Vinyl",
       "This is what electronic music fans mean when they say 'dubstep'.",
+      "Vinyl",
       categories[1],
       19.99,
       10

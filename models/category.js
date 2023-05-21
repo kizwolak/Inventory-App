@@ -7,7 +7,7 @@ const Category = new Schema({
 });
 
 // Virtual for this genre instance URL.
-Genre.virtual("url").get(function () {
+Category.virtual("url").get(function () {
   return "/category/" + this._id;
 });
 
