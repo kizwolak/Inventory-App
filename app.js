@@ -14,7 +14,7 @@ var app = express();
 
 mongoose.set("strictQuery", false);
 const mongoDB = process.env.MONGODB_SECRET;
-main.catch((err) => console.log(err));
+main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
 }
