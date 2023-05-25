@@ -4,10 +4,12 @@
 
 const Category = require("./models/category");
 const Item = require("./models/item");
+const Author = require("./models/author");
 require("dotenv").config();
 
 const categories = [];
 const items = [];
+const authors = [];
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false); // Prepare for Mongoose 7
@@ -21,6 +23,7 @@ async function main() {
   await mongoose.connect(mongoDB);
   console.log("Debug: Should be connected?");
   await createCategories();
+  await createAuthors();
   await createItems();
   console.log("Debug: Closing mongoose");
   mongoose.connection.close();
@@ -31,6 +34,13 @@ async function categoryCreate(name) {
   await category.save();
   categories.push(category);
   console.log(`Added category: ${name}`);
+}
+
+async function authorCreate(name) {
+  const author = new Author({ name: name });
+  await author.save();
+  authors.push(author);
+  console.log(`Added author: ${name}`);
 }
 
 async function itemCreate(
@@ -58,12 +68,24 @@ async function itemCreate(
   console.log(`Added item: ${name}`);
 }
 
+async function createAuthors() {
+  console.log("Adding authors");
+  await Promise.all([
+    authorCreate("Boards of Canada"),
+    authorCreate("Burial"),
+    authorCreate("Steve Reich"),
+    authorCreate("Jefferson Airplane"),
+    authorCreate("Slowdive"),
+  ]);
+}
+
 async function createCategories() {
   console.log("Adding categories");
   await Promise.all([
-    categoryCreate("Boards of Canada"),
-    categoryCreate("Burial"),
-    categoryCreate("Steve Reich"),
+    categoryCreate("Electronic Music"),
+    categoryCreate("Classical"),
+    categoryCreate("Shoegaze"),
+    categoryCreate("Psychedelic Rock"),
   ]);
 }
 
@@ -72,6 +94,7 @@ async function createItems() {
   await Promise.all([
     itemCreate(
       "Music Has The Right To Children",
+      authors[0],
       "The best place to start listening to artsy electronic music. A little dated nowadays, but the ambience of the album is unreproducible.",
       "Vinyl",
       categories[0],
@@ -80,13 +103,58 @@ async function createItems() {
     ),
     itemCreate(
       "Untrue",
+      authors[1],
       "This is what electronic music fans mean when they say 'dubstep'.",
       "Vinyl",
-      categories[1],
+      categories[0],
       19.99,
       10
     ),
-    itemCreate("Music for 18 Musicians", false, "CD", categories[2], 24.99, 10),
+    itemCreate(
+      "Music for 18 Musicians",
+      authors[2],
+      false,
+      "CD",
+      categories[1],
+      24.99,
+      10
+    ),
+    itemCreate(
+      "Souvlaki",
+      authors[4],
+      false,
+      "Casette",
+      categories[2],
+      24.99,
+      1
+    ),
+    itemCreate(
+      "Surrealistic Pillow",
+      authors[3],
+      false,
+      "Vinyl",
+      categories[3],
+      249.99,
+      12
+    ),
+    itemCreate(
+      "Geogaddi",
+      authors[0],
+      "Scary and satanic. Not for little kids!",
+      "Ultra-rare Japanese promo casette tape signed by the band",
+      categories[0],
+      9001,
+      1
+    ),
+    itemCreate(
+      "Souvlaki",
+      authors[4],
+      "Self-titled and awesome.",
+      "Vinyl",
+      categories[2],
+      24.99,
+      1
+    ),
   ]);
 }
 
