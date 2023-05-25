@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const Author = new Schema({
+const AutorSchema = new Schema({
   name: { type: String, required: true, minLength: 3, maxLength: 150 },
 });
+
+AutorSchema.virtual("url").get(function () {
+  return `/item/${this._id}`;
+});
+
+module.exports = mongoose.model("Author", AutorSchema);

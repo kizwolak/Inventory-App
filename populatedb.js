@@ -14,6 +14,7 @@ const authors = [];
 const formats = [];
 
 const mongoose = require("mongoose");
+const author = require("./models/author");
 mongoose.set("strictQuery", false); // Prepare for Mongoose 7
 
 const mongoDB = process.env.MONGODB_SECRET;
@@ -55,6 +56,7 @@ async function formatCreate(name) {
 
 async function itemCreate(
   name,
+  author,
   description,
   format,
   category,
@@ -63,6 +65,7 @@ async function itemCreate(
 ) {
   itemdetail = {
     name: name,
+    author: author,
     description: description,
     format: format,
     category: category,
@@ -118,7 +121,7 @@ async function createItems() {
       formats[0],
       categories[0],
       29.99,
-      10
+      22
     ),
     itemCreate(
       "Untrue",
@@ -127,12 +130,12 @@ async function createItems() {
       formats[0],
       categories[0],
       19.99,
-      10
+      87
     ),
     itemCreate(
       "Music for 18 Musicians",
       authors[2],
-      false,
+      "Techno, but with classical instruments.",
       formats[1],
       categories[1],
       24.99,
@@ -141,7 +144,7 @@ async function createItems() {
     itemCreate(
       "Souvlaki",
       authors[4],
-      false,
+      "Has nothing to do with Greek food, but everything to do with fantastic music.",
       formats[2],
       categories[2],
       24.99,
@@ -150,7 +153,7 @@ async function createItems() {
     itemCreate(
       "Surrealistic Pillow",
       authors[3],
-      false,
+      "Today... everything you want, I swear... it all will come true. Just buy the album!",
       formats[0],
       categories[3],
       249.99,
@@ -161,10 +164,9 @@ async function createItems() {
       authors[0],
       "Scary and satanic. Not for little kids!",
       formats[2],
-      "Ultra-rare Japanese promo casette tape signed by the band",
       categories[0],
       9001,
-      1
+      15
     ),
     itemCreate(
       "Souvlaki",
@@ -173,7 +175,7 @@ async function createItems() {
       formats[2],
       categories[1],
       24.99,
-      1
+      25
     ),
   ]);
 }
