@@ -1,0 +1,11 @@
+extends layout 
+
+block content 
+
+    .container
+        h2(class='mt-3') #{author.name}
+
+        ul 
+            for record in records 
+                li 
+                    a(href=`${record.url}` class='h4') #{record.name}

@@ -1,0 +1,11 @@
+extends layout 
+
+block content 
+
+    .container
+        h2(class='mt-3')  #{format.name}
+
+        ul
+            for item in items 
+                li 
+                    a(href=`${item.url}` class='h4') #{item.name}

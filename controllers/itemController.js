@@ -6,15 +6,11 @@ const Format = require("../models/format");
 const asyncHandler = require("express-async-handler");
 
 exports.index = asyncHandler(async (req, res, next) => {
-  const [items, categories] = await Promise.all([
-    Item.find().exec(),
-    Category.find().exec(),
-  ]);
+  const [items, categories] = await Promise.all([Item.find().exec()]);
 
   res.render("index", {
     title: "The Record Shop",
     items: items,
-    categories: categories,
   });
 });
 

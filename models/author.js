@@ -7,7 +7,7 @@ const AutorSchema = new Schema({
 });
 
 AutorSchema.virtual("url").get(function () {
-  return `/item/${this._id}`;
+  return `/authors/author/${this._id}`;
 });
 
 module.exports = mongoose.model("Author", AutorSchema);

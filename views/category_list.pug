@@ -1,0 +1,8 @@
+extends layout 
+
+block content 
+
+    .container
+        for category in categories
+            .container(class='mt-5')
+                a(href=`${category.url}` class="h4") #{category.name}
