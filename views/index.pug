@@ -1,8 +1,10 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}!
 
   for item in items 
-    p #{item.name}
+    .container.m-5
+      h2 !{item.name}
+      p !{item.description}
+      p $!{item.price}
+      a(href = `${item.url}`) Click here to check it out!
