@@ -1,13 +1,21 @@
 extends layout 
 
 block content 
-    .container.my-5.p-2 
+    a(href='/') Home
+    .container.my-3.p-2 
         h2 #{item.name}
         h3 #{item.author.name}
     .container-fluid 
-        p #{item.description}
+        p(class='px-5 my-2 mx-5') #{item.description}
     .container.my-2.p-3
         p Format: #{item.format.name}
         p Category: #{item.category.name}
         h4 $#{item.price}
         p In stock: #{item.in_stock}
+    .container.my-2
+    -var n = 1;
+    .container.my-2.d-flex(style='gap: 1rem')
+        select(class="form-control" id="amount" style="width: 5rem")
+            - for (let n = 1; n <= item.in_stock; n++)
+                option(value=n)= n
+        button(type='button' class='btn btn-primary') Add to cart

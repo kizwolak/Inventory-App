@@ -25,8 +25,6 @@ exports.itemDetail = asyncHandler(async (req, res, next) => {
     .populate("category")
     .exec();
 
-  console.log(item);
-
   if (item === null) {
     const err = new Error("Item not found");
     err.status = 404;
