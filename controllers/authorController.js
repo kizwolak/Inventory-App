@@ -28,3 +28,37 @@ exports.get_author = asyncHandler(async (req, res, next) => {
     records: records,
   });
 });
+
+exports.author_create_get = (req, res, next) => {
+  res.render("author_form", { title: "Create Author" });
+};
+
+exports.author_create_post = [
+  body("name", "Author name must be at least 2 characters long")
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const author = new author({ name: req.body.name });
+
+    if (!errors.isEmpty()) {
+      res.render("author_form", {
+        title: "Create Author",
+        author: author,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const authorExists = await author.findOne({ name: req.body.id }).exec();
+      if (authorExists) {
+        res.redirect(authorExists.url);
+      } else {
+        await author.save();
+        res.redirect(author.url);
+      }
+    }
+  }),
+];
