@@ -42,7 +42,7 @@ exports.author_create_post = [
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
-    const author = new author({ name: req.body.name });
+    const author = new Author({ name: req.body.name });
 
     if (!errors.isEmpty()) {
       res.render("author_form", {
@@ -52,7 +52,7 @@ exports.author_create_post = [
       });
       return;
     } else {
-      const authorExists = await author.findOne({ name: req.body.id }).exec();
+      const authorExists = await Author.findOne({ name: req.body.name }).exec();
       if (authorExists) {
         res.redirect(authorExists.url);
       } else {

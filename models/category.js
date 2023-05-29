@@ -8,7 +8,7 @@ const Category = new Schema({
 
 // Virtual for this genre instance URL.
 Category.virtual("url").get(function () {
-  return "/category/" + this._id;
+  return "/categories/category/" + this._id;
 });
 
 // Export model.

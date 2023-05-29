@@ -52,7 +52,7 @@ exports.format_create_post = [
       });
       return;
     } else {
-      const formatExists = await Format.findOne({ name: req.body.id }).exec();
+      const formatExists = await Format.findOne({ name: req.body.name }).exec();
       if (formatExists) {
         res.redirect(formatExists.url);
       } else {
