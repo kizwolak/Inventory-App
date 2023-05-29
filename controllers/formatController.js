@@ -1,3 +1,4 @@
+const { body, validationResult } = require("express-validator");
 const Format = require("../models/format");
 const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
@@ -27,3 +28,37 @@ exports.get_format = asyncHandler(async (req, res, next) => {
     items: items,
   });
 });
+
+exports.format_create_get = (req, res, next) => {
+  res.render("format_form", { title: "Create Format" });
+};
+
+exports.format_create_post = [
+  body("name", "Format name must be at least 2 characters long")
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const format = new Format({ name: req.body.name });
+
+    if (!errors.isEmpty()) {
+      res.render("format_form", {
+        title: "Create Format",
+        format: format,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const formatExists = await Format.findOne({ name: req.body.id }).exec();
+      if (formatExists) {
+        res.redirect(formatExists.url);
+      } else {
+        await format.save();
+        res.redirect(format.url);
+      }
+    }
+  }),
+];
