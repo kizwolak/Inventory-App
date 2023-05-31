@@ -31,3 +31,79 @@ exports.itemDetail = asyncHandler(async (req, res, next) => {
     item: item,
   });
 });
+
+exports.item_create_get = asyncHandler(async (req, res, next) => {
+  const [allAuthors, allCategories, allFormats] = await Promise.all([
+    Author.find().exec(),
+    Category.find().exec(),
+    Format.find().exec(),
+  ]);
+  res.render("item_form", {
+    authors: allAuthors,
+    categories: allCategories,
+    formats: allFormats,
+  });
+});
+
+exports.item_create_post = [
+  (req, res, next) => {
+    if (!(req.body.category instanceof Array)) {
+      if (typeof req.body.category === undefined) req.body.category = [];
+      else req.body.category = new Array(req.body.category);
+    }
+    next();
+  },
+
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("author", "Author must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("summary").trim().escape(),
+  body("category.*").escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const item = new Item({
+      name: req.body.name,
+      author: req.body.author,
+      description: req.body.description,
+      format: req.body.format,
+      category: req.body.category,
+      price: req.body.price,
+      in_stock: req.body.in_stock,
+    });
+
+    console.log(item);
+
+    if (!errors.isEmpty()) {
+      const [allAuthors, allCategories, allFormats] = await Promise.all([
+        Author.find().exec(),
+        Category.find().exec(),
+        Format.find.exec(),
+      ]);
+      for (const category of allCategories) {
+        if (book.category.indexOf(genre._id) > -1) {
+          category.checked = "true";
+        }
+      }
+      res.render("item_form", {
+        name: req.body.name,
+        author: req.body.author,
+        description: req.body.description,
+        format: req.body.format,
+        category: req.body.category,
+        price: req.body.price,
+        in_stock: req.body.in_stock,
+        errors: errors.array(),
+        authors: allAuthors,
+        categories: allCategories,
+        formats: allFormats,
+      });
+    } else {
+      await item.save();
+      res.redirect(item.url);
+    }
+  }),
+];
