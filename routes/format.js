@@ -12,4 +12,7 @@ router.post("/create", format_controller.format_create_post);
 router.get("/format/:id/delete", format_controller.format_delete_get);
 router.post("/format/:id/delete", format_controller.format_delete_post);
 
+router.get("/format/:id/update", format_controller.format_update_get);
+router.post("/format/:id/update", format_controller.format_update_post);
+
 module.exports = router;

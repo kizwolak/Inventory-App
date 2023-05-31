@@ -100,3 +100,49 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
     res.redirect("/categorys");
   }
 });
+
+exports.category_update_get = asyncHandler(async (req, res, next) => {
+  const [category] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+  ]);
+
+  if (category === null) {
+    const err = new Error("category not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("category_form", {
+    title: "Update category",
+    category: category,
+  });
+});
+
+exports.category_update_post = [
+  body("name", "category name must be at least 2 characters long")
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const category = new Category({ name: req.body.name, _id: req.params.id });
+
+    if (!errors.isEmpty()) {
+      res.render("category_form", {
+        title: "Create category",
+        category: category,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const thecategory = await Category.findByIdAndUpdate(
+        req.params.id,
+        author,
+        {}
+      );
+      res.redirect(thecategory.url);
+    }
+  }),
+];

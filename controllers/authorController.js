@@ -127,19 +127,18 @@ exports.author_update_post = [
 
     if (!errors.isEmpty()) {
       res.render("author_form", {
-        title: "Create Author",
+        title: "Create author",
         author: author,
         errors: errors.array(),
       });
       return;
     } else {
-      const authorExists = await Author.findOne({ name: req.body.name }).exec();
-      if (authorExists) {
-        res.redirect(authorExists.url);
-      } else {
-        await author.save();
-        res.redirect(author.url);
-      }
+      const theauthor = await Author.findByIdAndUpdate(
+        req.params.id,
+        author,
+        {}
+      );
+      res.redirect(theauthor.url);
     }
   }),
 ];
