@@ -12,4 +12,7 @@ router.post("/create", author_controller.author_create_post);
 router.get("/author/:id/delete", author_controller.author_delete_get);
 router.post("/author/:id/delete", author_controller.author_delete_post);
 
+router.get("/author/:id/update", author_controller.author_update_get);
+router.post("/author/:id/update", author_controller.author_update_post);
+
 module.exports = router;

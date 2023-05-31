@@ -98,3 +98,48 @@ exports.author_delete_post = asyncHandler(async (req, res, next) => {
     res.redirect("/authors");
   }
 });
+
+exports.author_update_get = asyncHandler(async (req, res, next) => {
+  const [author] = await Promise.all([Author.findById(req.params.id).exec()]);
+
+  if (author === null) {
+    const err = new Error("Author not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("author_form", {
+    title: "Update author",
+    author: author,
+  });
+});
+
+exports.author_update_post = [
+  body("name", "Author name must be at least 2 characters long")
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const author = new Author({ name: req.body.name, _id: req.params.id });
+
+    if (!errors.isEmpty()) {
+      res.render("author_form", {
+        title: "Create Author",
+        author: author,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const authorExists = await Author.findOne({ name: req.body.name }).exec();
+      if (authorExists) {
+        res.redirect(authorExists.url);
+      } else {
+        await author.save();
+        res.redirect(author.url);
+      }
+    }
+  }),
+];
