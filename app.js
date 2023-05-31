@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/categories", categoryRouter);
-app.use("/item", itemRouter);
+app.use("/items", itemRouter);
 app.use("/formats", formatRouter);
 app.use("/authors", authorRouter);
 

@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const item_controller = require("../controllers/itemController");
 
-router.get("/:id", item_controller.itemDetail);
+router.get("/", item_controller.index);
+
+router.get("/item/:id", item_controller.itemDetail);
+
+router.get("/add", item_controller.item_create_get);
+router.post("/add", item_controller.item_create_post);
 
 module.exports = router;

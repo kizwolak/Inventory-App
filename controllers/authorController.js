@@ -62,3 +62,39 @@ exports.author_create_post = [
     }
   }),
 ];
+
+exports.author_delete_get = asyncHandler(async (req, res, next) => {
+  const [author, allItemsByAuthor] = await Promise.all([
+    Author.findById(req.params.id).exec(),
+    Item.find({ author: req.params.id }, "name description").exec(),
+  ]);
+
+  if (author === null) {
+    res.redirect("/catalog/authors");
+  }
+
+  res.render("author_delete", {
+    title: "Delete Author",
+    author: author,
+    author_items: allItemsByAuthor,
+  });
+});
+
+exports.author_delete_post = asyncHandler(async (req, res, next) => {
+  const [author, allItemsByAuthor] = await Promise.all([
+    Author.findById(req.params.id).exec(),
+    Book.find({ author: req.params.id }, "title summary").exec(),
+  ]);
+
+  if (allItemsByAuthor.length > 0) {
+    res.render("author_delete", {
+      title: "Delete Author",
+      author: author,
+      author_items: allItemsByAuthor,
+    });
+    return;
+  } else {
+    await Author.findByIdAndRemove(req.body.authorid);
+    res.redirect("/authors");
+  }
+});
