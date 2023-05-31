@@ -1,0 +1,25 @@
+extends layout 
+
+block content 
+    h1 #{title}: #{format.name}
+    
+    if format_items.length
+
+        p #[strong Delete the following albums before attempting to delete this format.]
+
+        div(style='margin-left:20px;margin-top:20px;')
+
+            h4 Albums
+
+            dl
+            each album in format_items
+                dt 
+                    a(href=album.url) #{album.name}
+                dd #{album.name}
+    else
+        p Do you really wish to delete this format?
+
+        form(method='POST' action='')
+            .form-group 
+                input#formatid.form-control(type='hidden' name='formatid' required='true' value='format._id')
+            button.btn.btn-primary(type='submit') Delete

@@ -62,3 +62,39 @@ exports.format_create_post = [
     }
   }),
 ];
+
+exports.format_delete_get = asyncHandler(async (req, res, next) => {
+  const [format, allItemsByFormat] = await Promise.all([
+    Format.findById(req.params.id).exec(),
+    Item.find({ format: req.params.id }, "name description").exec(),
+  ]);
+
+  if (format === null) {
+    res.redirect("/catalog/formats");
+  }
+
+  res.render("format_delete", {
+    title: "Delete format",
+    format: format,
+    format_items: allItemsByFormat,
+  });
+});
+
+exports.format_delete_post = asyncHandler(async (req, res, next) => {
+  const [format, allItemsByformat] = await Promise.all([
+    Format.findById(req.params.id).exec(),
+    Book.find({ format: req.params.id }, "title summary").exec(),
+  ]);
+
+  if (allItemsByformat.length > 0) {
+    res.render("format_delete", {
+      title: "Delete format",
+      format: format,
+      format_items: allItemsByFormat,
+    });
+    return;
+  } else {
+    await format.findByIdAndRemove(req.body.formatid);
+    res.redirect("/formats");
+  }
+});

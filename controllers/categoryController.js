@@ -64,3 +64,39 @@ exports.category_create_post = [
     }
   }),
 ];
+
+exports.category_delete_get = asyncHandler(async (req, res, next) => {
+  const [category, allItemsByCategory] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Item.find({ category: req.params.id }, "name description").exec(),
+  ]);
+
+  if (Category === null) {
+    res.redirect("/catalog/categorys");
+  }
+
+  res.render("category_delete", {
+    title: "Delete category",
+    category: category,
+    category_items: allItemsByCategory,
+  });
+});
+
+exports.category_delete_post = asyncHandler(async (req, res, next) => {
+  const [category, allItemsBycategory] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Book.find({ category: req.params.id }, "title summary").exec(),
+  ]);
+
+  if (allItemsByCategory.length > 0) {
+    res.render("category_delete", {
+      title: "Delete category",
+      category: category,
+      category_items: allItemsBycategory,
+    });
+    return;
+  } else {
+    await Category.findByIdAndRemove(req.body.categoryid);
+    res.redirect("/categorys");
+  }
+});
