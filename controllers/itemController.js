@@ -107,3 +107,23 @@ exports.item_create_post = [
     }
   }),
 ];
+
+exports.item_delete_get = asyncHandler(async (req, res, next) => {
+  const [item] = await Promise.all([Item.findById(req.params.id).exec()]);
+
+  if (item === null) {
+    res.redirect("/");
+  }
+
+  res.render("item_delete", {
+    title: "Delete item",
+    item: item,
+  });
+});
+
+exports.item_delete_post = asyncHandler(async (req, res, next) => {
+  const [item] = await Promise.all([Item.findById(req.params.id).exec()]);
+  console.log(item);
+  await Item.findByIdAndRemove(req.body.itemid);
+  res.redirect("/");
+});

@@ -71,7 +71,7 @@ exports.category_delete_get = asyncHandler(async (req, res, next) => {
     Item.find({ category: req.params.id }, "name description").exec(),
   ]);
 
-  if (Category === null) {
+  if (category === null) {
     res.redirect("/catalog/categorys");
   }
 
